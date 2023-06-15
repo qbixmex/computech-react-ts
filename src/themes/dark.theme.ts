@@ -23,6 +23,20 @@ const darkTheme = createTheme({
       main: red[600],
     },
   },
+  typography: {
+    h1: {
+      fontSize: "4.5rem",
+      fontWeight: "900"
+    },
+    h2: {
+      fontSize: "4rem",
+      fontWeight: "700"
+    },
+    h3: {
+      fontSize: "3rem",
+      fontWeight: "600"
+    }
+  }
 });
 
 export default darkTheme;
