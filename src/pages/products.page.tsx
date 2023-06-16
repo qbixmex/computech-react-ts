@@ -1,11 +1,12 @@
 import { Box, Button, Container, Typography } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CheckIcon from '@mui/icons-material/Check';
 import BlockIcon from '@mui/icons-material/Block';
-import InfoIcon from '@mui/icons-material/Info';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import products from '../data/products.json';
 
@@ -38,7 +39,7 @@ const columns: GridColDef[] = [
     field: 'published',
     headerName: 'Published',
     width: 75,
-    renderCell: (params) => (
+    renderCell: (params: GridRenderCellParams) => (
       <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
         { params.row.published ? <CheckIcon color="success" /> : <BlockIcon color="error" /> }
       </Box>
@@ -48,11 +49,11 @@ const columns: GridColDef[] = [
     field: 'actions',
     headerName: 'Actions',
     width: 250,
-    renderCell: (params) => (
+    renderCell: (params: GridRenderCellParams) => (
       <Box sx={{ display: "flex", gap: 2 }}>
-        <Button variant="contained" color="info"><InfoIcon /></Button>
+        <Button variant="contained" color="info"><InfoOutlinedIcon /></Button>
         <Button variant="contained" color="warning"><EditIcon /></Button>
-        <Button variant="contained" color="error"><DeleteIcon /></Button>
+        <Button variant="contained" color="error"><DeleteOutlineIcon /></Button>
       </Box>
     )
   },
@@ -74,13 +75,14 @@ const rows = [
 const Products = () => {
   return (
     <Container>
-      <Typography
-        component="h1"
-        variant="h1"
-        sx={{ textAlign: "left", fontSize: "3rem", my: 2 }}
-      >
-        Products
-      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Typography
+          component="h1"
+          variant="h1"
+          sx={{ textAlign: "left", fontSize: "3rem", my: 2 }}
+        >Products</Typography>
+        <Button variant="contained"><AddCircleOutlineIcon /></Button>
+      </Box>
 
       <Box sx={{ height: 600, width: '100%' }}>
         
