@@ -4,6 +4,6 @@
   color: #fff;
 }
 
-.link.active, .link:hover {
+.link:hover {
   color: orange;
 }

@@ -1,4 +1,5 @@
-import { Box, Button, Container, Typography } from '@mui/material';
+import { useEffect } from 'react';
+import { Box, Button, CircularProgress, Container, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -10,6 +11,8 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { RootState } from '../store';
 import { useAppDispatch, useAppSelector } from '../hooks';
+import { fetchProducts } from '../store/thunks';
+import { Product } from '../interfaces';
 
 type ProductRow = {
   id: string;
@@ -71,27 +74,29 @@ const columns: GridColDef[] = [
   },
 ];
 
-let rows: ProductRow[] = [];
-
 const Products = () => {
 
-  // TODO: const dispatch = useAppDispatch();
-  const { products /*, isLoading, isSaving*/ } = useAppSelector((state: RootState) => state.products);
+  const dispatch = useAppDispatch();
+  const {
+    products,
+    isLoading,
+    isSaving
+  } = useAppSelector((state: RootState) => state.products);
 
-  if (products.length) {
-    rows = [
-      ...products.map(product => ({
-        id: product.id,
-        title: product.title,
-        slug: product.slug,
-        brand: product.brand,
-        price: `$ ${product.price.toFixed(2)}`,
-        stock: product.stock,
-        category: product.category,
-        published: product.published,
-      }))
-    ];
-  };
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  const rows = products?.map(product => ({
+    id: product.id,
+    title: product.title,
+    slug: product.slug,
+    brand: product.brand,
+    price: `$ ${product.price.toFixed(2)}`,
+    stock: product.stock,
+    category: product.category,
+    published: product.published,
+  })) as ProductRow[];
 
   return (
     <Container>
@@ -103,23 +108,25 @@ const Products = () => {
         >Products</Typography>
         <Button variant="contained"><AddCircleOutlineIcon /></Button>
       </Box>
-
-      <Box sx={{ height: 600, width: '100%' }}>
-        
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 10,
-            },
-          },
-        }}
-        pageSizeOptions={[10]}
-        disableRowSelectionOnClick
-      />
-    </Box>
+      {
+        isLoading ? ( <CircularProgress /> ) : (
+          <Box sx={{ height: 600, width: '100%' }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 10,
+                  },
+                },
+              }}
+              pageSizeOptions={[10]}
+              disableRowSelectionOnClick
+            />
+          </Box>
+        )
+      }
     </Container>
   );
 };
