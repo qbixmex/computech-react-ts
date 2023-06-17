@@ -8,7 +8,19 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-import products from '../data/products.json';
+import { RootState } from '../store';
+import { useAppDispatch, useAppSelector } from '../hooks';
+
+type ProductRow = {
+  id: string;
+  title: string;
+  slug: string;
+  brand:string;
+  price: string;
+  stock: number;
+  category: string;
+  published: boolean;
+};
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 100 },
@@ -59,20 +71,28 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [
-  ...products.map(product => ({
-    id: product.id,
-    title: product.title,
-    slug: product.slug,
-    brand: product.brand,
-    price: `$ ${product.price.toFixed(2)}`,
-    stock: product.stock,
-    category: product.category,
-    published: product.published,
-  }))
-];
+let rows: ProductRow[] = [];
 
 const Products = () => {
+
+  // TODO: const dispatch = useAppDispatch();
+  const { products /*, isLoading, isSaving*/ } = useAppSelector((state: RootState) => state.products);
+
+  if (products.length) {
+    rows = [
+      ...products.map(product => ({
+        id: product.id,
+        title: product.title,
+        slug: product.slug,
+        brand: product.brand,
+        price: `$ ${product.price.toFixed(2)}`,
+        stock: product.stock,
+        category: product.category,
+        published: product.published,
+      }))
+    ];
+  };
+
   return (
     <Container>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
