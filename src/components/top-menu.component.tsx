@@ -124,7 +124,11 @@ const TopMenu = () => {
           >
             COMPUTECH
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{
+            flexGrow: 1,
+            display: { xs: 'none', md: 'flex' },
+            gap: { xs: 0, md: 1 }
+          }}>
             {pages.map((page) => (
               <NavLink
                 key={page.text}
