@@ -1,4 +1,4 @@
-import { FormEvent, ChangeEvent, useState } from 'react';
+import { FormEvent, ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Typography, Radio, Button, Box, Grid } from '@mui/material';
 
@@ -10,11 +10,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 import BackIcon from '@mui/icons-material/ChevronLeft';
 
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { createProduct } from '../../store/thunks/products.thunks';
 import { ProductData } from '../../interfaces';
 import { createSlug } from '../../helpers';
 import styles from './create-page.module.css';
+import { RootState } from '../../store';
 
 const INITIAL_DATA: ProductData = {
   title: '',
@@ -32,6 +33,7 @@ const INITIAL_DATA: ProductData = {
 const CreateProductPage = () => {
 
   const dispatch = useAppDispatch();
+  const { formSubmitted, errors, isSaving } = useAppSelector((state: RootState) => state.products);
   const navigate = useNavigate();
   const [ FormData, setFormData ] = useState<ProductData>(INITIAL_DATA);
 
@@ -47,6 +49,10 @@ const CreateProductPage = () => {
     navigate('/admin/products', { replace: true });
   };
 
+  const clearForm = () => {
+    setFormData(INITIAL_DATA);
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -58,9 +64,16 @@ const CreateProductPage = () => {
       images: ['img-1.jpg', 'img-2.jpg', 'img-3.jpg'],
     }));
 
-    //* Clear Form
-    setFormData(INITIAL_DATA);
+    setTimeout(() => {
+      navigate('/admin/products', { replace: true });
+    }, 1700);
   };
+
+  useEffect(() => {
+    if (formSubmitted && !errors) {
+      clearForm();
+    }
+  }, [formSubmitted, errors, navigate]);
 
   return (
     <Container>

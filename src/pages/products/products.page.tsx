@@ -133,11 +133,11 @@ const ProductsPage = () => {
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 8,
+                    pageSize: 5,
                   },
                 },
               }}
-              pageSizeOptions={[10]}
+              pageSizeOptions={[5, 10, 25, 50, 100]}
               disableRowSelectionOnClick
             />
           </Box>

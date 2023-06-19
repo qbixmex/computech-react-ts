@@ -1,5 +1,6 @@
 import { Dispatch } from '@reduxjs/toolkit';
 // import { RootState as GetState } from '../store';
+import Swal from 'sweetalert2';
 
 import {
   getProductsAPI,
@@ -10,6 +11,10 @@ import {
   onStartLoadingProducts,
   onSetProducts,
   onAddProduct,
+  onStartSavingProduct,
+  onFormSubmitted,
+  onResetFlags,
+  onSetErrorFlag,
 } from '../slices/products.slice';
 
 import { ProductData } from '../../interfaces';
@@ -42,17 +47,25 @@ export const fetchProducts = () => {
 
 export const createProduct = (payload: ProductData) => {
   return async (dispatch: Dispatch) => {
+    dispatch(onStartSavingProduct());
     try {
-      const response = await createProductAPI(payload);
-
-      if (!response) {
-        console.error(response);
-        throw new Error("Could not save the product");
-      }
-
-      dispatch(onAddProduct(response));
+      const data = await createProductAPI(payload);
+      dispatch(onAddProduct(data));
+      Swal.fire({
+        position: 'center',
+        title: 'OK',
+        html: 'Product created successfully',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        dispatch(onFormSubmitted());
+      }, 1600);
+      dispatch(onResetFlags());
     } catch (error) {
-      console.error(error);
+      dispatch(onSetErrorFlag());
+      Swal.fire('Error', String(error), 'error');
     }
   };
 };

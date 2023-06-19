@@ -5,7 +5,7 @@ const { VITE_API_URL } = getEnvironmentVariables();
 
 export const getProductsAPI = async (): Promise<Product[]> => {
   const response = await fetch(
-    `${VITE_API_URL}/products`
+    `${VITE_API_URL}/products?limit=100`
     // {
     //   headers: {
     //     'x-token': localStorage.getItem('token') ?? '',
@@ -36,11 +36,14 @@ export const createProductAPI = async (productData: ProductData): Promise<Produc
     },
   );
 
-  if (!response) {
-    throw new Error('Could not perform the request!');
+  if (!response.ok) {
+    const error = await response.json();
+    if (typeof error.message === 'object') throw new Error(error.message[0]);
+    if (typeof error.message === 'string') throw new Error(error.message);
   }
 
   const data = await response.json();
 
   return data;
+
 };
