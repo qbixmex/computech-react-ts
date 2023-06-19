@@ -13,7 +13,6 @@ import {
   onAddProduct,
   onStartSavingProduct,
   onFormSubmitted,
-  onResetFlags,
   onSetErrorFlag,
 } from '../slices/products.slice';
 
@@ -47,10 +46,14 @@ export const fetchProducts = () => {
 
 export const createProduct = (payload: ProductData) => {
   return async (dispatch: Dispatch) => {
+
     dispatch(onStartSavingProduct());
+
     try {
       const data = await createProductAPI(payload);
+
       dispatch(onAddProduct(data));
+
       Swal.fire({
         position: 'center',
         title: 'OK',
@@ -59,10 +62,11 @@ export const createProduct = (payload: ProductData) => {
         showConfirmButton: false,
         timer: 1500,
       });
+
       setTimeout(() => {
         dispatch(onFormSubmitted());
       }, 1600);
-      dispatch(onResetFlags());
+
     } catch (error) {
       dispatch(onSetErrorFlag());
       Swal.fire('Error', String(error), 'error');

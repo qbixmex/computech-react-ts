@@ -1,13 +1,14 @@
 import { FormEvent, ChangeEvent, useState, useEffect } from 'react';
+import { RootState } from '../../store';
+import { onResetFlags } from '../../store/slices';
 import { useNavigate } from 'react-router-dom';
-import { Container, Typography, Radio, Button, Box, Grid } from '@mui/material';
 
+import { Container, Typography, Radio, Button, Grid } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
 import BackIcon from '@mui/icons-material/ChevronLeft';
 
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -15,7 +16,6 @@ import { createProduct } from '../../store/thunks/products.thunks';
 import { ProductData } from '../../interfaces';
 import { createSlug } from '../../helpers';
 import styles from './create-page.module.css';
-import { RootState } from '../../store';
 
 const INITIAL_DATA: ProductData = {
   title: '',
@@ -63,17 +63,15 @@ const CreateProductPage = () => {
       stock: Number(FormData.stock),
       images: ['img-1.jpg', 'img-2.jpg', 'img-3.jpg'],
     }));
-
-    setTimeout(() => {
-      navigate('/admin/products', { replace: true });
-    }, 1700);
   };
 
   useEffect(() => {
     if (formSubmitted && !errors) {
       clearForm();
+      dispatch(onResetFlags());
+      navigate('/admin/products', { replace: true });
     }
-  }, [formSubmitted, errors, navigate]);
+  }, [formSubmitted, errors, navigate, dispatch]);
 
   return (
     <Container>
@@ -165,19 +163,6 @@ const CreateProductPage = () => {
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
               <TextField
-                id="category"
-                label="Category"
-                variant="outlined"
-                name="category"
-                autoComplete="off"
-                onChange={ onInputChange }
-                value={ FormData.category }
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth>
-              <TextField
                 id="stock"
                 label="stock"
                 variant="outlined"
@@ -185,6 +170,19 @@ const CreateProductPage = () => {
                 autoComplete="off"
                 onChange={ onInputChange }
                 value={ FormData.stock }
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <TextField
+                id="category"
+                label="Category"
+                variant="outlined"
+                name="category"
+                autoComplete="off"
+                onChange={ onInputChange }
+                value={ FormData.category }
               />
             </FormControl>
           </Grid>

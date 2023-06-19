@@ -36,6 +36,7 @@ export const createProductAPI = async (productData: ProductData): Promise<Produc
     },
   );
 
+
   if (!response.ok) {
     const error = await response.json();
     if (typeof error.message === 'object') throw new Error(error.message[0]);

@@ -39,6 +39,7 @@ const productsSlice = createSlice({
     },
     onFormSubmitted: (state) => {
       state.formSubmitted = true;
+      state.errors = false;
     },
     onResetFlags: (state) => {
       state.isLoading = false;
