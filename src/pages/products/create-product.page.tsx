@@ -1,5 +1,6 @@
 import { FormEvent, ChangeEvent, useState } from 'react';
-import { Container, Typography, Radio, Button, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Container, Typography, Radio, Button, Box, Grid } from '@mui/material';
 
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
@@ -7,31 +8,32 @@ import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-type FormData = {
-  title: string;
-  brand: string;
-  color: string;
-  price: string;
-  description: string;
-  category: string;
-  stock: string;
-  condition: string;
-};
+import BackIcon from '@mui/icons-material/ChevronLeft';
 
-const INITIAL_DATA: FormData = {
+import { useAppDispatch } from '../../hooks';
+import { createProduct } from '../../store/thunks/products.thunks';
+import { ProductData } from '../../interfaces';
+import { createSlug } from '../../helpers';
+import styles from './create-page.module.css';
+
+const INITIAL_DATA: ProductData = {
   title: '',
+  slug: '',
   brand: '',
   color: '',
-  price: '',
+  price: 0,
   description: '',
   category: '',
-  stock: '',
+  stock: 0,
   condition: 'new',
+  images: [],
 };
 
 const CreateProductPage = () => {
 
-  const [ FormData, setFormData ] = useState<FormData>(INITIAL_DATA);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [ FormData, setFormData ] = useState<ProductData>(INITIAL_DATA);
 
   const onInputChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = target;
@@ -41,13 +43,20 @@ const CreateProductPage = () => {
     });
   };
 
+  const handleBack = () => {
+    navigate('/admin/products', { replace: true });
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // TODO: UPDATE Global State
-
-    // TODO: CALL API SERVICE
-    console.table(FormData);
+    dispatch(createProduct({
+      ...FormData,
+      slug: createSlug(FormData.title),
+      price: Number(FormData.price),
+      stock: Number(FormData.stock),
+      images: ['img-1.jpg', 'img-2.jpg', 'img-3.jpg'],
+    }));
 
     //* Clear Form
     setFormData(INITIAL_DATA);
@@ -62,110 +71,133 @@ const CreateProductPage = () => {
       >Create Product</Typography>
 
       <form onSubmit={handleSubmit}>
-        <FormControl sx={{ mb: 2 }} fullWidth>
-          <TextField
-            id="title"
-            label="Title"
-            variant="outlined"
-            name="title"
-            autoComplete="off"
-            onChange={ onInputChange }
-            value={ FormData.title }
-          />
-        </FormControl>
-        <FormControl sx={{ mb: 2 }} fullWidth>
-          <TextField
-            id="brand"
-            label="Brand"
-            variant="outlined"
-            name="brand"
-            autoComplete="off"
-            onChange={ onInputChange }
-            value={ FormData.brand }
-          />
-        </FormControl>
-        <FormControl sx={{ mb: 2 }} fullWidth>
-          <TextField
-            id="color"
-            label="Color"
-            variant="outlined"
-            name="color"
-            autoComplete="off"
-            onChange={ onInputChange }
-            value={ FormData.color }
-          />
-        </FormControl>
-        <FormControl sx={{ mb: 2 }} fullWidth>
-          <TextField
-            id="price"
-            label="Price"
-            variant="outlined"
-            name="price"
-            autoComplete="off"
-            onChange={ onInputChange }
-            value={ FormData.price }
-          />
-        </FormControl>
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <TextField
-            id="description"
-            label="Description"
-            variant="outlined"
-            name="description"
-            multiline
-            minRows={5}
-            autoComplete="off"
-            onChange={ onInputChange }
-            value={ FormData.description }
-          />
-        </FormControl>
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <TextField
-            id="category"
-            label="Category"
-            variant="outlined"
-            name="category"
-            autoComplete="off"
-            onChange={ onInputChange }
-            value={ FormData.category }
-          />
-        </FormControl>
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <TextField
-            id="stock"
-            label="stock"
-            variant="outlined"
-            name="stock"
-            autoComplete="off"
-            onChange={ onInputChange }
-            value={ FormData.stock }
-          />
-        </FormControl>
-        <FormControl
-          sx={{ padding: "16px 0 8px 16px", mb: 2, border: 1, borderColor: 'hsla(0, 0%, 100%, 0.25)', borderRadius: "5px" }}
-          fullWidth
-        >
-          <FormLabel id="condition">Condition</FormLabel>
-          <RadioGroup defaultValue="new" name="condition" onChange={ onInputChange }>
-            <FormControlLabel value="new" control={<Radio />} label="New" />
-            <FormControlLabel value="used" control={<Radio />} label="Used" />
-            <FormControlLabel value="other" control={<Radio />} label="Other" />
-          </RadioGroup>
-        </FormControl>
-
-        <Box
-          sx={{
-            display: { xs: "block", md: "flex" },
-            justifyContent: { xs: 'flex-start', md: 'flex-end' },
-            mb: 4
-          }}
-        >
-          <Button
-            variant="contained"
-            sx={{ width: { xs: "100%", md: "auto" } }}
-            type="submit"
-          >Create</Button>
-        </Box>
+        <Grid container spacing={2} mb={4}>
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <TextField
+                id="title"
+                label="Title"
+                variant="outlined"
+                name="title"
+                autoComplete="off"
+                onChange={ onInputChange }
+                value={ FormData.title }
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <TextField
+                id="brand"
+                label="Brand"
+                variant="outlined"
+                name="brand"
+                autoComplete="off"
+                onChange={ onInputChange }
+                value={ FormData.brand }
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <TextField
+                id="color"
+                label="Color"
+                variant="outlined"
+                name="color"
+                autoComplete="off"
+                onChange={ onInputChange }
+                value={ FormData.color }
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+          <FormControl fullWidth>
+            <TextField
+              id="price"
+              label="Price"
+              variant="outlined"
+              name="price"
+              autoComplete="off"
+              onChange={ onInputChange }
+              value={ FormData.price }
+            />
+          </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <TextField
+                id="description"
+                label="Description"
+                variant="outlined"
+                name="description"
+                multiline
+                minRows={6}
+                autoComplete="off"
+                onChange={ onInputChange }
+                value={ FormData.description }
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+          <FormControl fullWidth className={ styles.condition }>
+            <FormLabel>Condition</FormLabel>
+            <RadioGroup defaultValue="new" name="condition" onChange={ onInputChange }>
+              <FormControlLabel value="new" control={<Radio />} label="New" />
+              <FormControlLabel value="used" control={<Radio />} label="Used" />
+              <FormControlLabel value="other" control={<Radio />} label="Other" />
+            </RadioGroup>
+          </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <TextField
+                id="category"
+                label="Category"
+                variant="outlined"
+                name="category"
+                autoComplete="off"
+                onChange={ onInputChange }
+                value={ FormData.category }
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <TextField
+                id="stock"
+                label="stock"
+                variant="outlined"
+                name="stock"
+                autoComplete="off"
+                onChange={ onInputChange }
+                value={ FormData.stock }
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={ handleBack }
+              size="large"
+              sx={{ width: { xs: "100%", md: "fit-content" } }}
+            ><BackIcon /> Back</Button>
+          </Grid>
+          <Grid item xs={12} md={6}
+            sx={{
+              display: "flex",
+              justifyContent: { xs: "flex-start", md: "flex-end" },
+            }}
+          >
+            <Button
+              variant="contained"
+              sx={{ width: { xs: "100%", md: "fit-content" } }}
+              type="submit"
+              color="success"
+            >Create</Button>
+          </Grid>
+        </Grid>
       </form>
     </Container>
   );

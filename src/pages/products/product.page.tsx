@@ -125,7 +125,7 @@ const ProductPage = () => {
         onClick={ handleBack }
         size="large"
       >
-        <BackIcon />
+        <BackIcon /> Back
       </Button>
 
     </Container>

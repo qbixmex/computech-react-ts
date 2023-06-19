@@ -26,19 +26,15 @@ const productsSlice = createSlice({
       state.isLoading = false;
       state.products = action.payload.products;
     },
-    fetchProducts: (state) => {
-      throw new Error('Not implemented');
-    },
-    addProduct: (state, action: PayloadAction<string>) => {
-      throw new Error('Not implemented');
+    onAddProduct: (state, action: PayloadAction<Product>) => {
+      state.products?.push(action.payload);
     },
   },
 });
 
 export const {
-  fetchProducts,
   onStartLoadingProducts,
   onSetProducts,
-  addProduct
+  onAddProduct,
 } = productsSlice.actions;
 export default productsSlice;

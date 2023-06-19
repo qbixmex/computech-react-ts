@@ -1,0 +1,10 @@
+.condition {
+  padding: 16px 0 8px 16px !important;
+  margin-bottom: 16px !important;
+  border: solid 1px hsla(0, 0%, 100%, 0.25) !important;
+  border-radius: 5px !important;
+}
+
+.condition:hover {
+  border-color: #fff !important;
+}
