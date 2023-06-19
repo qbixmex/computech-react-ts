@@ -108,6 +108,10 @@ const ProductsPage = () => {
     navigate(`/admin/products/${id}`);
   };
 
+  const onCreateProduct = () => {
+    navigate("/admin/products/create");
+  };
+
   return (
     <Container>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -116,7 +120,9 @@ const ProductsPage = () => {
           variant="h1"
           sx={{ textAlign: "left", fontSize: "3rem", my: 2 }}
         >Products</Typography>
-        <Button variant="contained"><AddCircleOutlineIcon /></Button>
+        <Button variant="contained" onClick={ onCreateProduct }>
+          <AddCircleOutlineIcon />
+        </Button>
       </Box>
       {
         isLoading ? ( <CircularProgress /> ) : (
@@ -127,11 +133,11 @@ const ProductsPage = () => {
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 10,
+                    pageSize: 5,
                   },
                 },
               }}
-              pageSizeOptions={[10]}
+              pageSizeOptions={[5, 10, 25, 50, 100]}
               disableRowSelectionOnClick
             />
           </Box>

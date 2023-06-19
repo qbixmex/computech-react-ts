@@ -16,4 +16,17 @@ interface Product {
   updatedAt: string;
 }
 
+export interface ProductData {
+  title: string;
+  slug: string;
+  brand: string;
+  color: string;
+  price: number;
+  description: string;
+  category: string;
+  stock: number;
+  condition: string;
+  images: string[];
+}
+
 export default Product;

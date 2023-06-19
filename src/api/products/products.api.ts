@@ -1,11 +1,11 @@
 import { getEnvironmentVariables } from '../../helpers';
-import { Product } from '../../interfaces';
+import { Product, ProductData } from '../../interfaces';
 
 const { VITE_API_URL } = getEnvironmentVariables();
 
-export const getProducts = async (): Promise<Product[]> => {
+export const getProductsAPI = async (): Promise<Product[]> => {
   const response = await fetch(
-    `${VITE_API_URL}/products`
+    `${VITE_API_URL}/products?limit=100`
     // {
     //   headers: {
     //     'x-token': localStorage.getItem('token') ?? '',
@@ -20,4 +20,30 @@ export const getProducts = async (): Promise<Product[]> => {
   const data = await response.json();
 
   return data;
+};
+
+export const createProductAPI = async (productData: ProductData): Promise<Product> => {
+  const response = await fetch(
+    `${VITE_API_URL}/products`,
+    {
+      headers: {
+        // 'x-token': localStorage.getItem('token') ?? '',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      mode: 'cors',
+      body: JSON.stringify(productData),
+    },
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    if (typeof error.message === 'object') throw new Error(error.message[0]);
+    if (typeof error.message === 'string') throw new Error(error.message);
+  }
+
+  const data = await response.json();
+
+  return data;
+
 };
