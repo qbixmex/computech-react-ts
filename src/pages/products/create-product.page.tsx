@@ -9,7 +9,6 @@ import TextField from '@mui/material/TextField';
 import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import BackIcon from '@mui/icons-material/ChevronLeft';
 
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { createProduct } from '../../store/thunks/products.thunks';
@@ -193,7 +192,7 @@ const CreateProductPage = () => {
               onClick={ handleBack }
               size="large"
               sx={{ width: { xs: "100%", md: "fit-content" } }}
-            ><BackIcon /> Back</Button>
+            >Cancel</Button>
           </Grid>
           <Grid item xs={12} md={6}
             sx={{

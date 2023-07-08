@@ -1,4 +1,5 @@
 import { getEnvironmentVariables } from '../../helpers';
+import { DeleteResponse } from '../../types';
 import { Product, ProductData } from '../../interfaces';
 
 const { VITE_API_URL } = getEnvironmentVariables();
@@ -33,6 +34,32 @@ export const createProductAPI = async (productData: ProductData): Promise<Produc
       method: 'POST',
       mode: 'cors',
       body: JSON.stringify(productData),
+    },
+  );
+
+
+  if (!response.ok) {
+    const error = await response.json();
+    if (typeof error.message === 'object') throw new Error(error.message[0]);
+    if (typeof error.message === 'string') throw new Error(error.message);
+  }
+
+  const data = await response.json();
+
+  return data;
+
+};
+
+export const deleteProductAPI = async (id: string): Promise<DeleteResponse> => {
+  const response = await fetch(
+    `${VITE_API_URL}/products/${id}`,
+    {
+      headers: {
+        // 'x-token': localStorage.getItem('token') ?? '',
+        'Content-Type': 'application/json',
+      },
+      method: 'DELETE',
+      mode: 'cors'
     },
   );
 

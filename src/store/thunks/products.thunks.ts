@@ -4,7 +4,8 @@ import Swal from 'sweetalert2';
 
 import {
   getProductsAPI,
-  createProductAPI
+  createProductAPI,
+  deleteProductAPI,
 } from '../../api/products';
 
 import {
@@ -12,8 +13,11 @@ import {
   onSetProducts,
   onAddProduct,
   onStartSavingProduct,
+  onStartDeletingProduct,
+  onDeleteProduct,
   onFormSubmitted,
   onSetErrorFlag,
+  onResetFlags,
 } from '../slices/products.slice';
 
 import { ProductData } from '../../interfaces';
@@ -68,6 +72,47 @@ export const createProduct = (payload: ProductData) => {
       }, 1600);
 
     } catch (error) {
+      dispatch(onSetErrorFlag());
+      Swal.fire('Error', String(error), 'error');
+    }
+  };
+};
+
+export const deleteProduct = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(onStartDeletingProduct());
+
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    });
+
+    try {
+      if (result.isConfirmed) {
+        const data = await deleteProductAPI(id);
+        if (data.ok) {
+          dispatch(onDeleteProduct({ id }));
+          Swal.fire(
+            'Deleted!',
+            'Product was deleted successfully',
+            'success'
+          );
+        } else {
+          Swal.fire(
+            'Error!',
+            'Product not deleted',
+            'error'
+          );
+        }
+      } else {
+        dispatch(onResetFlags());
+      }
+    } catch(error) {
       dispatch(onSetErrorFlag());
       Swal.fire('Error', String(error), 'error');
     }
