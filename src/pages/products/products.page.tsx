@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box, Button, CircularProgress, Container, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 
@@ -26,7 +26,6 @@ type ProductRow = {
 };
 
 const ProductsPage = () => {
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const productsState = useAppSelector((state: RootState) => state.products);
@@ -81,7 +80,12 @@ const ProductsPage = () => {
             >
               <InfoOutlinedIcon />
             </Button>
-            <Button variant="contained" color="warning" size="small"><EditIcon /></Button>
+            <Button
+              variant="contained"
+              color="warning"
+              size="small"
+              onClick={ () => onEditProduct(params.row.id) }
+            ><EditIcon /></Button>
             <Button
               variant="contained"
               color="error"
@@ -116,6 +120,10 @@ const ProductsPage = () => {
 
   const onCreateProduct = () => {
     navigate("/admin/products/create");
+  };
+
+  const onEditProduct = (id: string) => {
+    navigate(`/admin/products/edit/${id}`);
   };
 
   const onDeleteProduct = (id: string) => {

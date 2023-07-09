@@ -1,5 +1,5 @@
 interface Product {
-  id: string;
+  id?: string;
   title: string;
   slug: string;
   brand: string;
@@ -12,8 +12,8 @@ interface Product {
   published: boolean;
   category: string;
   tags: string[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ProductData {

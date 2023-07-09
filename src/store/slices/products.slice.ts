@@ -42,6 +42,14 @@ const productsSlice = createSlice({
       state.products?.push(action.payload);
       state.isSaving = false;
     },
+    onUpdateProduct: (state, action: PayloadAction<Product>) => {
+      state.products = state.products?.map(product => (
+        (product.id === action.payload.id)
+          ? action.payload
+          : product
+      ));
+      state.isSaving = false;
+    },
     onDeleteProduct: (state, action: PayloadAction<{ id: string }>) => {
       state.products = state.products?.filter(product => product.id !== action.payload.id);
       state.isDeleting = false;
@@ -67,6 +75,7 @@ export const {
   onStartLoadingProducts,
   onSetProducts,
   onAddProduct,
+  onUpdateProduct,
   onStartSavingProduct,
   onStartDeletingProduct,
   onDeleteProduct,

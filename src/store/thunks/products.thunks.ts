@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import {
   getProductsAPI,
   createProductAPI,
+  updateProductAPI,
   deleteProductAPI,
 } from '../../api/products';
 
@@ -12,6 +13,7 @@ import {
   onStartLoadingProducts,
   onSetProducts,
   onAddProduct,
+  onUpdateProduct,
   onStartSavingProduct,
   onStartDeletingProduct,
   onDeleteProduct,
@@ -20,7 +22,7 @@ import {
   onResetFlags,
 } from '../slices/products.slice';
 
-import { ProductData } from '../../interfaces';
+import { Product, ProductData } from '../../interfaces';
 
 export const fetchProducts = () => {
   return async (dispatch: Dispatch/*getState: () => GetState*/) => {
@@ -62,6 +64,36 @@ export const createProduct = (payload: ProductData) => {
         position: 'center',
         title: 'OK',
         html: 'Product created successfully',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      setTimeout(() => {
+        dispatch(onFormSubmitted());
+      }, 1600);
+
+    } catch (error) {
+      dispatch(onSetErrorFlag());
+      Swal.fire('Error', String(error), 'error');
+    }
+  };
+};
+
+export const updateProduct = (payload: Product) => {
+  return async (dispatch: Dispatch) => {
+
+    dispatch(onStartSavingProduct());
+
+    try {
+      await updateProductAPI(payload);
+
+      dispatch(onUpdateProduct(payload));
+
+      Swal.fire({
+        position: 'center',
+        title: 'OK',
+        html: 'Product updated successfully',
         icon: 'success',
         showConfirmButton: false,
         timer: 1500,
