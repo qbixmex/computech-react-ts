@@ -1,0 +1,162 @@
+import { ChangeEvent } from 'react';
+
+import { Radio, Button, Grid } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
+import { Product } from "../../interfaces";
+import styles from './form.module.css';
+
+type Props = {
+  Data: Product;
+  onInputChange: ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onBack: () => void,
+};
+
+const ProductForm = ({Data, onInputChange, onBack}: Props) => {
+  return (
+    <Grid container spacing={2} mb={4}>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <TextField
+            id="title"
+            label="Title"
+            variant="outlined"
+            name="title"
+            autoComplete="off"
+            onChange={onInputChange}
+            value={Data.title}
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <TextField
+            id="brand"
+            label="Brand"
+            variant="outlined"
+            name="brand"
+            autoComplete="off"
+            onChange={onInputChange}
+            value={Data.brand}
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <TextField
+            id="color"
+            label="Color"
+            variant="outlined"
+            name="color"
+            autoComplete="off"
+            onChange={onInputChange}
+            value={Data.color}
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <TextField
+            id="price"
+            label="Price"
+            variant="outlined"
+            name="price"
+            autoComplete="off"
+            onChange={onInputChange}
+            value={Data.price}
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <TextField
+            id="description"
+            label="Description"
+            variant="outlined"
+            name="description"
+            multiline
+            minRows={6}
+            autoComplete="off"
+            onChange={onInputChange}
+            value={Data.description}
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth className={styles.condition}>
+          <FormLabel>Condition</FormLabel>
+          <RadioGroup
+            defaultValue="new"
+            name="condition"
+            onChange={onInputChange}
+          >
+            <FormControlLabel value="new" control={<Radio />} label="New" />
+            <FormControlLabel value="used" control={<Radio />} label="Used" />
+            <FormControlLabel value="other" control={<Radio />} label="Other" />
+          </RadioGroup>
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <TextField
+            id="stock"
+            label="stock"
+            variant="outlined"
+            name="stock"
+            autoComplete="off"
+            onChange={onInputChange}
+            value={Data.stock}
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <TextField
+            id="category"
+            label="Category"
+            variant="outlined"
+            name="category"
+            autoComplete="off"
+            onChange={onInputChange}
+            value={Data.category}
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onBack}
+          size="large"
+          sx={{ width: { xs: "100%", md: "fit-content" } }}
+        >
+          Cancel
+        </Button>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        md={6}
+        sx={{
+          display: "flex",
+          justifyContent: { xs: "flex-start", md: "flex-end" },
+        }}
+      >
+        <Button
+          variant="contained"
+          sx={{ width: { xs: "100%", md: "fit-content" } }}
+          type="submit"
+          color="success"
+        >
+          Save
+        </Button>
+      </Grid>
+    </Grid>
+  );
+};
+
+export default ProductForm;
