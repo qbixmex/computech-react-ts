@@ -18,5 +18,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <CssBaseline />
       </ThemeProvider>
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

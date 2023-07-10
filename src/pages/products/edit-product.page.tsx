@@ -26,7 +26,6 @@ const INITIAL_DATA: Product = {
   tags: [],
   createdAt: '',
   updatedAt: '',
-  published: false,
 };
 
 const EditProductPage = () => {
@@ -45,6 +44,19 @@ const EditProductPage = () => {
     FormData, setFormData, onResetForm, onInputChange, onBack,
   } = useProductsForm<Product>(INITIAL_DATA);
 
+  useEffect(() => {
+    const productData = products?.find(product =>  product.id === id);
+    (id && productData) ? setFormData(productData) : onBack();
+  }, []);
+
+  useEffect(() => {
+    if (formSubmitted && !errors) {
+      dispatch(onResetFlags());
+      onResetForm();
+      onBack();
+    }
+  }, [formSubmitted, errors]);
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const productToUpdate: Product = {
@@ -56,25 +68,6 @@ const EditProductPage = () => {
     dispatch(updateProduct(productToUpdate));
   };
 
-  useEffect(() => {
-    const productData = products?.find(product =>  product.id === id);
-    if (id && productData) {
-      setFormData(productData);
-    } else {
-      onBack();
-    }
-  }, [id, onBack, products, setFormData]);
-
-  useEffect(() => {
-    if (formSubmitted && !errors) {
-      dispatch(onResetFlags());
-      onResetForm();
-      onBack();
-    } else {
-      onBack();
-    }
-  }, [id, dispatch, errors, formSubmitted, onBack, onResetForm, products]);
-
   return (
     <Container>
       <Typography
@@ -85,7 +78,7 @@ const EditProductPage = () => {
 
       <form onSubmit={handleSubmit}>
         <ProductForm
-          Data={FormData}
+          data={FormData}
           onBack={onBack}
           onInputChange={onInputChange}
         />

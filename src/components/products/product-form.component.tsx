@@ -1,22 +1,22 @@
 import { ChangeEvent } from 'react';
 
-import { Radio, Button, Grid } from "@mui/material";
-import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
-import FormLabel from "@mui/material/FormLabel";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import { Radio, Button, Grid } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+import FormLabel from '@mui/material/FormLabel';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { Product } from "../../interfaces";
-import styles from './form.module.css';
+import { Product } from '../../interfaces';
+import styles from './product-form.module.css';
 
 type Props = {
-  Data: Product;
+  data: Product;
   onInputChange: ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onBack: () => void,
 };
 
-const ProductForm = ({Data, onInputChange, onBack}: Props) => {
+const ProductForm = ({data, onInputChange, onBack}: Props) => {
   return (
     <Grid container spacing={2} mb={4}>
       <Grid item xs={12} md={6}>
@@ -28,7 +28,7 @@ const ProductForm = ({Data, onInputChange, onBack}: Props) => {
             name="title"
             autoComplete="off"
             onChange={onInputChange}
-            value={Data.title}
+            value={data.title}
           />
         </FormControl>
       </Grid>
@@ -41,7 +41,7 @@ const ProductForm = ({Data, onInputChange, onBack}: Props) => {
             name="brand"
             autoComplete="off"
             onChange={onInputChange}
-            value={Data.brand}
+            value={data.brand}
           />
         </FormControl>
       </Grid>
@@ -54,7 +54,7 @@ const ProductForm = ({Data, onInputChange, onBack}: Props) => {
             name="color"
             autoComplete="off"
             onChange={onInputChange}
-            value={Data.color}
+            value={data.color}
           />
         </FormControl>
       </Grid>
@@ -67,7 +67,7 @@ const ProductForm = ({Data, onInputChange, onBack}: Props) => {
             name="price"
             autoComplete="off"
             onChange={onInputChange}
-            value={Data.price}
+            value={data.price}
           />
         </FormControl>
       </Grid>
@@ -82,7 +82,7 @@ const ProductForm = ({Data, onInputChange, onBack}: Props) => {
             minRows={6}
             autoComplete="off"
             onChange={onInputChange}
-            value={Data.description}
+            value={data.description}
           />
         </FormControl>
       </Grid>
@@ -90,13 +90,27 @@ const ProductForm = ({Data, onInputChange, onBack}: Props) => {
         <FormControl fullWidth className={styles.condition}>
           <FormLabel>Condition</FormLabel>
           <RadioGroup
-            defaultValue="new"
             name="condition"
             onChange={onInputChange}
           >
-            <FormControlLabel value="new" control={<Radio />} label="New" />
-            <FormControlLabel value="used" control={<Radio />} label="Used" />
-            <FormControlLabel value="other" control={<Radio />} label="Other" />
+            <FormControlLabel
+              value="new"
+              control={<Radio />}
+              label="New"
+              checked={ data.condition === "new" ? true : false }
+            />
+            <FormControlLabel
+              value="used"
+              control={<Radio />}
+              label="Used"
+              checked={ data.condition === "used" ? true : false }
+            />
+            <FormControlLabel
+              value="refurbished"
+              control={<Radio />}
+              label="Refurbished"
+              checked={ data.condition === "refurbished" ? true : false }
+            />
           </RadioGroup>
         </FormControl>
       </Grid>
@@ -109,7 +123,7 @@ const ProductForm = ({Data, onInputChange, onBack}: Props) => {
             name="stock"
             autoComplete="off"
             onChange={onInputChange}
-            value={Data.stock}
+            value={data.stock}
           />
         </FormControl>
       </Grid>
@@ -122,7 +136,7 @@ const ProductForm = ({Data, onInputChange, onBack}: Props) => {
             name="category"
             autoComplete="off"
             onChange={onInputChange}
-            value={Data.category}
+            value={data.category}
           />
         </FormControl>
       </Grid>

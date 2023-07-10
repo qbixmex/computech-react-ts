@@ -22,7 +22,7 @@ import {
   onResetFlags,
 } from '../slices/products.slice';
 
-import { Product, ProductData } from '../../interfaces';
+import { Product } from '../../interfaces';
 
 export const fetchProducts = () => {
   return async (dispatch: Dispatch/*getState: () => GetState*/) => {
@@ -34,6 +34,7 @@ export const fetchProducts = () => {
 
       dispatch(onSetProducts({ products }));
 
+      // TODO: Local Store
       // const localProducts = localStorage.getItem('products');
       // if (!localProducts) {
       //   const data = await getProductsAPI();
@@ -50,7 +51,7 @@ export const fetchProducts = () => {
   };
 };
 
-export const createProduct = (payload: ProductData) => {
+export const createProduct = (payload: Product) => {
   return async (dispatch: Dispatch) => {
 
     dispatch(onStartSavingProduct());
@@ -86,9 +87,9 @@ export const updateProduct = (payload: Product) => {
     dispatch(onStartSavingProduct());
 
     try {
-      await updateProductAPI(payload);
+      const data = await updateProductAPI(payload);
 
-      dispatch(onUpdateProduct(payload));
+      dispatch(onUpdateProduct(data));
 
       Swal.fire({
         position: 'center',

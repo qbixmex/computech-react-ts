@@ -6,7 +6,9 @@ const useProductsForm = <T>(INITIAL_DATA: T) => {
   const [ FormData, setFormData ] = useState<T>(INITIAL_DATA);
   const navigate = useNavigate();
 
-  const onResetForm = () => setFormData(INITIAL_DATA);
+  const onResetForm = () => {
+    setFormData(INITIAL_DATA);
+  };
 
   const onInputChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = target;
