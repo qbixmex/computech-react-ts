@@ -7,6 +7,7 @@ type ProductsState = {
   products?: Product[];
   isLoading?: boolean;
   isSaving?: boolean;
+  isDeleting?: boolean;
   errors?: boolean;
   formSubmitted?: boolean;
 };
@@ -15,6 +16,7 @@ const initialState: ProductsState = {
   products: [],
   isLoading: false,
   isSaving: false,
+  isDeleting: false,
   errors: false,
   formSubmitted: false,
 };
@@ -33,17 +35,34 @@ const productsSlice = createSlice({
     onStartSavingProduct: (state) => {
       state.isSaving = true;
     },
+    onStartDeletingProduct: (state) => {
+      state.isDeleting = true;
+    },
     onAddProduct: (state, action: PayloadAction<Product>) => {
       state.products?.push(action.payload);
       state.isSaving = false;
     },
+    onUpdateProduct: (state, action: PayloadAction<Product>) => {
+      state.products = state.products?.map(product => (
+        (product.id === action.payload.id)
+          ? action.payload
+          : product
+      ));
+      state.isSaving = false;
+    },
+    onDeleteProduct: (state, action: PayloadAction<{ id: string }>) => {
+      state.products = state.products?.filter(product => product.id !== action.payload.id);
+      state.isDeleting = false;
+    },
     onFormSubmitted: (state) => {
       state.formSubmitted = true;
+      state.errors = false;
     },
     onResetFlags: (state) => {
       state.isLoading = false;
       state.isSaving = false;
       state.errors = false;
+      state.isDeleting = false;
       state.formSubmitted = false;
     },
     onSetErrorFlag: (state) => {
@@ -56,7 +75,10 @@ export const {
   onStartLoadingProducts,
   onSetProducts,
   onAddProduct,
+  onUpdateProduct,
   onStartSavingProduct,
+  onStartDeletingProduct,
+  onDeleteProduct,
   onFormSubmitted,
   onResetFlags,
   onSetErrorFlag,

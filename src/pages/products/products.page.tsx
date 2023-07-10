@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box, Button, CircularProgress, Container, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 
@@ -12,7 +12,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { RootState } from '../../store';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { fetchProducts } from '../../store/thunks';
+import { fetchProducts, deleteProduct } from '../../store/thunks';
 
 type ProductRow = {
   id: string;
@@ -26,11 +26,10 @@ type ProductRow = {
 };
 
 const ProductsPage = () => {
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const productsState = useAppSelector((state: RootState) => state.products);
-  const { products, isLoading } = productsState;
+  const { products, isLoading, isDeleting } = productsState;
 
   const columns: GridColDef[] = [
     {
@@ -81,8 +80,19 @@ const ProductsPage = () => {
             >
               <InfoOutlinedIcon />
             </Button>
-            <Button variant="contained" color="warning" size="small"><EditIcon /></Button>
-            <Button variant="contained" color="error" size="small"><DeleteOutlineIcon /></Button>
+            <Button
+              variant="contained"
+              color="warning"
+              size="small"
+              onClick={ () => onEditProduct(params.row.id) }
+            ><EditIcon /></Button>
+            <Button
+              variant="contained"
+              color="error"
+              size="small"
+              onClick={ () => onDeleteProduct(params.row.id) }
+              disabled={ isDeleting ? true : false }
+            ><DeleteOutlineIcon /></Button>
           </Box>
         );
       }
@@ -110,6 +120,14 @@ const ProductsPage = () => {
 
   const onCreateProduct = () => {
     navigate("/admin/products/create");
+  };
+
+  const onEditProduct = (id: string) => {
+    navigate(`/admin/products/edit/${id}`);
+  };
+
+  const onDeleteProduct = (id: string) => {
+    dispatch(deleteProduct(id));
   };
 
   return (
