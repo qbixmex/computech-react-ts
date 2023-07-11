@@ -59,12 +59,19 @@ const EditProductPage = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const tagsCollection = (typeof FormData.tags === 'string')
+      ? FormData.tags.split(",")
+      : FormData.tags;
+
     const productToUpdate: Product = {
       ...FormData,
+      tags: tagsCollection,
       slug: createSlug(FormData.title),
       price: Number(FormData.price),
       stock: Number(FormData.stock),
     };
+
     dispatch(updateProduct(productToUpdate));
   };
 

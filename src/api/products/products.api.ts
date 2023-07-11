@@ -1,6 +1,6 @@
 import { getEnvironmentVariables } from '../../helpers';
 import { DeleteResponse } from '../../types';
-import { Product, ProductData } from '../../interfaces';
+import { Product } from '../../interfaces';
 
 const { VITE_API_URL } = getEnvironmentVariables();
 
@@ -23,7 +23,7 @@ export const getProductsAPI = async (): Promise<Product[]> => {
   return data;
 };
 
-export const createProductAPI = async (productData: ProductData): Promise<Product> => {
+export const createProductAPI = async (productData: Product): Promise<Product> => {
   const response = await fetch(
     `${VITE_API_URL}/products`,
     {

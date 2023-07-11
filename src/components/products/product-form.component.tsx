@@ -138,6 +138,32 @@ const ProductForm = ({data, onInputChange, onBack, isSaving}: Props) => {
       <Grid item xs={12} md={6}>
         <FormControl fullWidth>
           <TextField
+            id="tags"
+            label="tags"
+            variant="outlined"
+            name="tags"
+            autoComplete="off"
+            onChange={onInputChange}
+            value={data.tags}
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <TextField
+            id="image"
+            label="images"
+            variant="outlined"
+            name="image"
+            autoComplete="off"
+            onChange={onInputChange}
+            value={data.images}
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <TextField
             id="category"
             label="Category"
             variant="outlined"
