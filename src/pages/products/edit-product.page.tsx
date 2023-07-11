@@ -36,7 +36,7 @@ const EditProductPage = () => {
   const {
     formSubmitted,
     errors,
-    // TODO: isSaving,
+    isSaving,
     products
   } = useAppSelector((state: RootState) => state.products);
   
@@ -81,6 +81,7 @@ const EditProductPage = () => {
           data={FormData}
           onBack={onBack}
           onInputChange={onInputChange}
+          isSaving={isSaving ?? false}
         />
       </form>
     </Container>

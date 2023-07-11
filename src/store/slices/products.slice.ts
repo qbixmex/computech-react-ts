@@ -67,6 +67,7 @@ const productsSlice = createSlice({
     },
     onSetErrorFlag: (state) => {
       state.errors = true;
+      state.isSaving = false;
     },
   },
 });

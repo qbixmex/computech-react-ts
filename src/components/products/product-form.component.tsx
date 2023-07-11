@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { Radio, Button, Grid } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
@@ -14,9 +14,17 @@ type Props = {
   data: Product;
   onInputChange: ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onBack: () => void,
+  isSaving: boolean;
 };
 
-const ProductForm = ({data, onInputChange, onBack}: Props) => {
+const ProductForm = ({data, onInputChange, onBack, isSaving}: Props) => {
+
+  const [ disabled, setDisabled ] = useState(false);
+
+  useEffect(() => {
+    setDisabled(isSaving ? true : false);
+  }, [isSaving]);
+
   return (
     <Grid container spacing={2} mb={4}>
       <Grid item xs={12} md={6}>
@@ -147,6 +155,7 @@ const ProductForm = ({data, onInputChange, onBack}: Props) => {
           onClick={onBack}
           size="large"
           sx={{ width: { xs: "100%", md: "fit-content" } }}
+          disabled={disabled}
         >
           Cancel
         </Button>
@@ -165,6 +174,7 @@ const ProductForm = ({data, onInputChange, onBack}: Props) => {
           sx={{ width: { xs: "100%", md: "fit-content" } }}
           type="submit"
           color="success"
+          disabled={disabled}
         >
           Save
         </Button>

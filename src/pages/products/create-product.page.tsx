@@ -30,7 +30,7 @@ const CreateProductPage = () => {
   const {
     formSubmitted,
     errors,
-    // TODO: isSaving,
+    isSaving,
   } = useAppSelector((state: RootState) => state.products);
 
   const {
@@ -55,7 +55,7 @@ const CreateProductPage = () => {
       dispatch(onResetFlags());
       onBack();
     }
-  }, [dispatch, errors, formSubmitted, onBack, onResetForm]);
+  }, [formSubmitted, errors]);
 
   return (
     <Container>
@@ -69,6 +69,7 @@ const CreateProductPage = () => {
           data={FormData}
           onBack={onBack}
           onInputChange={onInputChange}
+          isSaving={isSaving ?? false}
         />
       </form>
     </Container>
