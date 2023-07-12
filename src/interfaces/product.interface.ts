@@ -11,7 +11,7 @@ interface Product {
   stock: number;
   published?: boolean;
   category: string;
-  tags: string[] | string;
+  tags: string[];
   createdAt?: string;
   updatedAt?: string;
 }

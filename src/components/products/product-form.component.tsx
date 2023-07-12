@@ -1,14 +1,43 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { Radio, Button, Grid } from '@mui/material';
+import { Theme, useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import FormLabel from '@mui/material/FormLabel';
-import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import Grid from '@mui/material/Grid';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 
 import { Product } from '../../interfaces';
 import styles from './product-form.module.css';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const getStyles = (tag: string, tagName: readonly string[], theme: Theme) => {
+  return {
+    fontWeight:
+      tagName.indexOf(tag) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+};
 
 type Props = {
   data: Product;
@@ -19,11 +48,27 @@ type Props = {
 
 const ProductForm = ({data, onInputChange, onBack, isSaving}: Props) => {
 
+  const theme = useTheme();
+  const [ tagsCollection, setTagsCollection ] = useState<string[]>([]);
   const [ disabled, setDisabled ] = useState(false);
+
+  useEffect(() => {
+    if (data.tags.length !== 0) {
+      setTagsCollection(data.tags);
+    }
+  }, []);
 
   useEffect(() => {
     setDisabled(isSaving ? true : false);
   }, [isSaving]);
+
+  const handleChange = (event: SelectChangeEvent<typeof tagsCollection>) => {
+    const { target: { value } } = event;
+    setTagsCollection(
+      // On autofill we get a stringified value.
+      (typeof value === 'string') ? value.split(',') : value,
+    );
+  };
 
   return (
     <Grid container spacing={2} mb={4}>
@@ -137,16 +182,30 @@ const ProductForm = ({data, onInputChange, onBack, isSaving}: Props) => {
       </Grid>
       <Grid item xs={12} md={6}>
         <FormControl fullWidth>
-          <TextField
-            id="tags"
-            label="tags"
-            variant="outlined"
-            name="tags"
-            autoComplete="off"
-            onChange={onInputChange}
-            value={data.tags}
-          />
-        </FormControl>
+          <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+          <Select
+            labelId="demo-multiple-chip-label"
+            id="demo-multiple-chip"
+            multiple
+            value={tagsCollection}
+            onChange={handleChange}
+            input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+            renderValue={selected => (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                {selected.map(value => <Chip key={value} label={value} />)}
+              </Box>
+            )}
+            MenuProps={MenuProps}
+          >
+          {data.tags.map(tag => (
+            <MenuItem
+              key={tag}
+              value={tag}
+              style={getStyles(tag, tagsCollection, theme)}
+            >{tag}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       </Grid>
       <Grid item xs={12} md={6}>
         <FormControl fullWidth>
