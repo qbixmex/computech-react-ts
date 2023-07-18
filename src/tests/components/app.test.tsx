@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
-import { Loader } from '../../components';
+import App from '../../App';
 
-describe('<Loader /> component tests', () => {
-  test('Should have Saving text', () => {
-    render(<Loader />);
-    const text = screen.getByText(/Saving/i);
+describe('Tests on <App /> component', () => {
+  test('Should render correctly', () => {
+    render(<App />);
 
-    expect(text).toBeInTheDocument();
-    expect(text).toHaveTextContent('Saving');
+    const heading = screen.getByRole('heading', { level: 1 });
+
+    expect(heading).toHaveTextContent('Public Page');
   });
 });
